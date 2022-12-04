@@ -18,7 +18,7 @@ func Day3() {
 	defer inputText.Close()
 
 	scanner := bufio.NewScanner(inputText)
-	runeArray := make([]rune, 1)
+	//runeArray := make([]rune, 1)
 	sum := 0
 
 	stringArray := make([]string, 0)
@@ -34,7 +34,7 @@ func Day3() {
 		for _, v := range left {
 			for _, c := range right {
 				if v == c {
-					runeArray = append(runeArray, v)
+					//runeArray = append(runeArray, v)
 					if v < 96 {
 						sum += int(v) - 38
 					} else {
@@ -58,7 +58,7 @@ func Day3() {
 				if v == b {
 					for _, n := range stringArray[i+2] {
 						if v == n {
-							fmt.Println(v)
+							//fmt.Println(v)
 							if v < 96 {
 								sumB += int(v) - 38
 							} else {
