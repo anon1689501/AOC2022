@@ -32,9 +32,7 @@ func Day6(uniqueLength int) {
 				break
 			}
 		}
-
 	}
-
 }
 
 func isUnique(testString string) (result bool) {
@@ -46,5 +44,4 @@ func isUnique(testString string) (result bool) {
 		}
 	}
 	return true
-
 }

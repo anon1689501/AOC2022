@@ -1,0 +1,100 @@
+// package main
+
+// import (
+// 	"bufio"
+// 	"fmt"
+// 	"log"
+// 	"os"
+// 	"strconv"
+// 	"strings"
+// )
+
+// // type Tree struct{
+// // 	Parent *Tree
+// // 	Children map[string]*Tree
+// // 	Payload int
+// // }
+
+// // func NewTree(parent *Tree, path []string, payload int) *Tree {
+// // 	if parent == nil {
+// // 		parent = &Tree{nil, map[string]*Tree{}, 0}
+// // 	}
+
+// // 	if len(path) == 0 {
+// // 		parent.Payload = payload
+// // 		return parent
+// // 	}
+
+// // 	child := parent.Children[path[0]]
+// // 	if child == nil {
+// // 		child = &Tree{parent, map[string]*Tree{}, 0}
+// // 	}
+// // 	return NewTree(child, path[1:], payload)
+// // }
+
+// type Node struct {
+// 	tag      string
+// 	text     string
+// 	children []*Node
+// }
+
+// func Day7() {
+// 	inputText, err := os.Open("input/day7.txt")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	defer inputText.Close()
+
+// 	scanner := bufio.NewScanner(inputText)
+
+// 	directory := []Node{}
+
+// 	for scanner.Scan() {
+// 		input := strings.Fields(scanner.Text())
+// 		if input[0] == "$" && input[1] == "cd" {
+// 			currentDirectory = input[2]
+// 			//fmt.Println("found directory", input[2])
+// 		} else if input[0] == "$" {
+// 			//probably ignore because its a ls
+// 		} else if input[0] == "dir" {
+// 			//do mapping
+// 			directoryContains[currentDirectory] = append(directoryContains[currentDirectory], input[1])
+// 		} else {
+// 			//its a number
+// 			size, _ := strconv.Atoi(input[0])
+// 			directorySums[currentDirectory] += size
+// 			//fmt.Println(currentDirectory, size)
+// 		}
+// 	}
+// 	fmt.Println(directoryContains)
+// 	fmt.Println(directorySums)
+// 	for mainDir, listOfSubDir := range directoryContains {
+// 		for _, dir := range listOfSubDir {
+// 			directorySums[mainDir] += iterateSubDir(directorySums, directoryContains, dir)
+// 		}
+// 	}
+
+// 	for _, dirSum := range directorySums {
+// 		if dirSum <= 100000 {
+// 			totalSum += dirSum
+// 		}
+// 	}
+// 	fmt.Println("total sum", totalSum)
+// 	fmt.Println(directorySums)
+
+// }
+
+// func iterateSubDir(Sums map[string]int, Contains map[string][]string, directory string) (dirSum int) {
+// 	dirSum = 0
+// 	fmt.Println("call with", directory)
+// 	if _, subDirFound := Contains[directory]; subDirFound {
+// 		for _, subDir := range Contains[directory] {
+// 			dirSum += iterateSubDir(Sums, Contains, subDir)
+// 		}
+// 	}
+// 	return Sums[directory] + dirSum
+// }
+
+// //1149424 too low
+// //1257239 too low
