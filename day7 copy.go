@@ -66,6 +66,16 @@ func Day7_copy() {
 
 	fmt.Println(directorySums["/"])
 
+	valueToDelete := 70000000
+	spaceRequired := 30000000 - (70000000 - 47870454)
+
+	for _, dirSum := range directorySums {
+		if dirSum < valueToDelete && dirSum > spaceRequired {
+			valueToDelete = dirSum
+		}
+	}
+	fmt.Println(valueToDelete)
+
 }
 
 func iterateSubDir_copy(Sums map[string]int, Contains map[string][]string, directory string) (dirSum int) {
@@ -85,3 +95,8 @@ func iterateSubDir_copy(Sums map[string]int, Contains map[string][]string, direc
 //1571315 too low
 
 //47870454 possible total size
+
+//8583399 too low
+//8652144 too low
+//8934862 too low
+//9724718 uknown
