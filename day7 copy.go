@@ -19,7 +19,8 @@ func Day7_copy() {
 
 	scanner := bufio.NewScanner(inputText)
 
-	directorySums := make(map[string]int)
+	directoryValue := make(map[string]int)
+	// directorySums := make(map[string]int)
 	directoryContains := make(map[string][]string)
 
 	currentDirectory := ""
@@ -27,13 +28,13 @@ func Day7_copy() {
 
 	for scanner.Scan() {
 		input := strings.Fields(scanner.Text())
-		if input[0] == "$" && input[1] == "cd" {
-			if input[2] == ".." {
+		if input[0] == "$" && input[1] == "cd" { //save the full dir path in a string with split by ""
+			if input[2] == ".." { //go up a directory
 				currentDirectory = strings.Join(strings.Fields(currentDirectory)[:len(strings.Fields(currentDirectory))-1], " ")
-			} else {
+			} else { //set up for the initial directory of /
 				if currentDirectory == "" {
 					currentDirectory = input[2]
-				} else {
+				} else { //save folder name to currentDirectory
 					currentDirectory += " " + input[2]
 				}
 			}
@@ -45,50 +46,65 @@ func Day7_copy() {
 		} else {
 			//its a number
 			size, _ := strconv.Atoi(input[0])
-			directorySums[currentDirectory] += size
+			for i, _ := range strings.Fields(currentDirectory) {
+				currentDirectorySlice := strings.Fields(currentDirectory)
+				partialDirectory := strings.Join(strings.Fields(currentDirectory)[:len(currentDirectorySlice)-i], " ")
+				// fmt.Println("full", currentDirectory, "partial", partialDirectory, "size", size)
+				directoryValue[partialDirectory] += size
+			}
 		}
 	}
-	// fmt.Println(directoryContains)
+	// fmt.Println("contains", directoryContains)
+	// fmt.Println("values", directoryValue)
+
+	// for mainDir, listOfSubDir := range directoryContains {
+	// 	for _, fullDir := range listOfSubDir {
+	// 		fmt.Println("main", mainDir)
+	// 		for length, _ := range strings.Fields(fullDir) {
+	// 			fmt.Println("sub", fullDir)
+	// 			directorySums[mainDir] += directoryValue[strings.Join(strings.Fields(fullDir)[length:], " ")]
+	// 			fmt.Println(mainDir, ":", fullDir, ",", strings.Join(strings.Fields(fullDir)[length:], "value"))
+	// 		}
+	// 		fmt.Println("")
+
+	// 	}
+	// }
 	// fmt.Println(directorySums)
 
-	for mainDir, listOfSubDir := range directoryContains {
-		for _, dir := range listOfSubDir {
-			directorySums[mainDir] += iterateSubDir_copy(directorySums, directoryContains, dir)
-		}
-	}
-
-	for _, dirSum := range directorySums {
+	for _, dirSum := range directoryValue {
 		if dirSum <= 100000 {
 			totalSum += dirSum
 		}
 	}
+
 	fmt.Println("total sum", totalSum)
 
-	fmt.Println(directorySums["/"])
+	//fmt.Println(directoryValue["/"])
 
 	valueToDelete := 70000000
-	spaceRequired := 30000000 - (70000000 - 47870454)
+	spaceRequired := 30000000 - (valueToDelete - directoryValue["/"])
 
-	for _, dirSum := range directorySums {
+	for _, dirSum := range directoryValue {
 		if dirSum < valueToDelete && dirSum > spaceRequired {
 			valueToDelete = dirSum
 		}
 	}
+
 	fmt.Println(valueToDelete)
 
 }
 
-func iterateSubDir_copy(Sums map[string]int, Contains map[string][]string, directory string) (dirSum int) {
-	dirSum = 0
+// func iterateSubDir_copy(Sums map[string]int, Contains map[string][]string, directory string) (dirSum int) {
+// 	dirSum = 0
 
-	//fmt.Println("call with", directory)
-	if _, subDirFound := Contains[directory]; subDirFound {
-		for _, subDir := range Contains[directory] {
-			dirSum += iterateSubDir_copy(Sums, Contains, subDir)
-		}
-	}
-	return Sums[directory] + dirSum
-}
+// 	//fmt.Println("call with", directory)
+// 	if _, subDirFound := Contains[directory]; subDirFound {
+// 		for _, subDir := range Contains[directory] {
+// 			dirSum += iterateSubDir_copy(Sums, Contains, subDir)
+// 		}
+// 	}
+// 	return Sums[directory] + dirSum
+// }
 
 //1149424 too low
 //1257239 too low
