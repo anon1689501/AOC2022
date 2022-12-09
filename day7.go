@@ -46,7 +46,7 @@ func Day7() {
 		} else {
 			//its a number
 			size, _ := strconv.Atoi(input[0])
-			for i, _ := range strings.Fields(currentDirectory) {
+			for i := range strings.Fields(currentDirectory) {
 				currentDirectorySlice := strings.Fields(currentDirectory)
 				partialDirectory := strings.Join(strings.Fields(currentDirectory)[:len(currentDirectorySlice)-i], " ")
 				// fmt.Println("full", currentDirectory, "partial", partialDirectory, "size", size)
