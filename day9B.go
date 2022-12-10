@@ -20,7 +20,7 @@ func Day9B() {
 
 	visited := make(map[string]int)
 
-	var knots [10]Position
+	var knots []Position
 
 	for i := 0; i < len(knots); i++ {
 		knots[i].xCoord = 0
@@ -37,9 +37,6 @@ func Day9B() {
 	// 	return
 	// }
 
-	testHead := Position{5, 1}
-	testTail := Position{4, 0}
-	fmt.Println(move(testHead, testTail))
 	//end of write file area
 	inputLine := 0
 	scanner := bufio.NewScanner(inputText)
@@ -55,7 +52,7 @@ func Day9B() {
 		switch direction {
 
 		case "L":
-			fmt.Print(direction, distance)
+			//fmt.Print(direction, distance)
 			for i := 0; i < distance; i++ {
 				//fmt.Print(knots[0])
 				knots[0].xCoord--
@@ -70,12 +67,12 @@ func Day9B() {
 					}
 
 				}
-				fmt.Println(knots)
+				//fmt.Println(knots)
 
 			}
 
 		case "R":
-			fmt.Print(direction, distance)
+			//fmt.Print(direction, distance)
 			for i := 0; i < distance; i++ {
 				//fmt.Print(knots[0])
 				knots[0].xCoord++
@@ -89,12 +86,12 @@ func Day9B() {
 						visited[strconv.Itoa(knots[len(knots)-1].xCoord)+" "+strconv.Itoa(knots[len(knots)-1].yCoord)]++
 					}
 				}
-				fmt.Println(knots)
+				//fmt.Println(knots)
 
 			}
 
 		case "D":
-			fmt.Print(direction, distance)
+			//fmt.Print(direction, distance)
 			for i := 0; i < distance; i++ {
 				//fmt.Print(knots[0])
 				knots[0].yCoord--
@@ -111,12 +108,12 @@ func Day9B() {
 					}
 
 				}
-				fmt.Println(knots)
+				//fmt.Println(knots)
 
 			}
 
 		case "U":
-			fmt.Print(direction, distance)
+			//fmt.Print(direction, distance)
 			for i := 0; i < distance; i++ {
 				//fmt.Print(knots[0])
 				knots[0].yCoord++
@@ -133,7 +130,7 @@ func Day9B() {
 					}
 
 				}
-				fmt.Println(knots)
+				//fmt.Println(knots)
 
 			}
 
