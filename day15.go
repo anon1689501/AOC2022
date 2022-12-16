@@ -23,15 +23,16 @@ func Day15() {
 
 	scanner := bufio.NewScanner(inputText)
 
-	minX := 10000000
-	maxX := 0
+	// minX := 10000000
+	// maxX := 0
 
 	startLine := 0
-	endLine := 20
+	endLine := 4000000
 
-	targetRow := 2000000
-	rowDetails := make(map[int]rune)
+	//targetRow := 2000000
+	//rowDetails := make(map[int]rune)
 	pairs := make([]pair, 0)
+	sensors := make([]sensor, 0)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -45,48 +46,57 @@ func Day15() {
 		sensorY, _ := strconv.Atoi(fields[3])
 		beaconX, _ := strconv.Atoi(fields[8])
 		beaconY, _ := strconv.Atoi(fields[9])
-
-		// if sensorY == targetRow {
-		// 	rowDetails[sensorX] = 'S'
-		// }
-		// if beaconY == targetRow {
-		// 	rowDetails[beaconX] = 'B'
-		// }
-		//fmt.Println(sensorX, sensorY, findDistance(sensorX, sensorY, beaconX, beaconY))
-
-		//cave[xy{sensorX, sensorY}] = 'S'
-		//cave[xy{beaconX, beaconY}] = 'B'
-		//mapSensor(sensorX, sensorY, findDistance(sensorX, sensorY, beaconX, beaconY), cave)
-
-		localMinX, localMaxX := singleLine(sensorX, sensorY, findDistance(sensorX, sensorY, beaconX, beaconY), l)
-		pairs = append(pairs, pair{localMinX, localMaxX})
+		sensors = append(sensors, sensor{sensorX, sensorY, findDistance(sensorX, sensorY, beaconX, beaconY)})
 
 	}
 
-	for i := 0; i < len(pairs)-1; i++ {
-		for j := 0; j < len(pairs)-i-1; j++ {
-			//fmt.Println(linesB[j], linesB[j+1])
-			if !pairOrdered(pairs[j].min, pairs[j+1].min) {
-				pairs[j], pairs[j+1] = pairs[j+1], pairs[j]
+	for line := startLine; line <= endLine; line++ {
+		pairs = nil
+		for _, pairVal := range sensors {
+			tempPair := singleLine(pairVal, line)
+			if tempPair.max == 0 && tempPair.min == 0 {
+				continue
+			}
+			pairs = append(pairs, tempPair)
+			//fmt.Println(pairs)
+
+		}
+		//fmt.Println(pairs)
+		pairs = sortPairs(pairs)
+		//fmt.Println(pairs)
+		//front := pairs[0].min
+		end := pairs[0].max
+		for i := 1; i < len(pairs); i++ {
+			if pairs[i].min <= end { //ok
+				if pairs[i].max > end {
+					end = pairs[i].max
+				}
+
+			} else if end+2 == pairs[i].min {
+				fmt.Println("skipped one at row:", line, "column:", end+1, (end+1)*4000000+line)
+
+			} else {
+				//fmt.Println("row:", line, "column:", pairs[i].min)
 			}
 		}
+		//fmt.Println(front, end)
+
 	}
-	fmt.Println(pairs)
+
+	// fmt.Println(pairs)
 	//start := pairs[0].min
-	end := pairs[0].max
-	for i := 1; i < len(pairs)-1; i++ {
-		if pairs[i].min <= end { //ok
-			if pairs[i].max > end {
-				end = pairs[i].max
-			}
+	// end := pairs[0].max
+	// for i := 1; i < len(pairs)-1; i++ {
+	// 	if pairs[i].min <= end { //ok
+	// 		if pairs[i].max > end {
+	// 			end = pairs[i].max
+	// 		}
 
-		} else {
-			fmt.Println("row:", l, "column:", pairs[i].min)
-			break
-		}
-	}
-
-	fmt.Println(maxX - minX)
+	// 	} else {
+	// 		fmt.Println("row:", l, "column:", pairs[i].min)
+	// 		break
+	// 	}
+	// }
 
 	//d15Print(cave)
 	// nonBeaconCount := 0
@@ -102,6 +112,19 @@ func Day15() {
 	//fmt.Println(maxX - minX)
 }
 
+func sortPairs(pairs []pair) []pair {
+	for i := 0; i < len(pairs)-1; i++ {
+		for j := 0; j < len(pairs)-i-1; j++ {
+			//fmt.Println(linesB[j], linesB[j+1])
+			if !pairOrdered(pairs[j].min, pairs[j+1].min) {
+				pairs[j], pairs[j+1] = pairs[j+1], pairs[j]
+			}
+		}
+	}
+	return pairs
+
+}
+
 func pairOrdered(left int, right int) bool {
 	return left <= right
 }
@@ -109,6 +132,12 @@ func pairOrdered(left int, right int) bool {
 type pair struct {
 	min int
 	max int
+}
+
+type sensor struct {
+	x        int
+	y        int
+	distance int
 }
 
 func findDistance(sensorX int, sensorY int, beaconX int, beaconY int) int {
@@ -199,22 +228,22 @@ func mapSensor(sensorX int, sensorY int, distance int, cave map[xy]bool) { //cav
 
 // }
 
-func singleLine(sensorX int, sensorY int, distance int, row int) (minX int, maxX int) { //cave map[xy]rune,
+func singleLine(sen sensor, row int) (myPair pair) { //cave map[xy]rune,
 
-	minX = 0
-	maxX = 0
+	myPair.min = 0
+	myPair.max = 0
 
-	if sensorY < row && sensorY+distance > row { //sensor above (lower y value ) than target row
-		remainingDistance := distance - Abs(row-sensorY) //row 10 distance 20 target 20
-		minX = sensorX - remainingDistance
-		maxX = sensorX + remainingDistance
+	if sen.y < row && sen.y+sen.distance > row { //sensor above (lower y value ) than target row
+		remainingDistance := sen.distance - Abs(row-sen.y) //row 10 distance 20 target 20
+		myPair.min = sen.x - remainingDistance
+		myPair.max = sen.x + remainingDistance
 
-	} else if sensorY > row && sensorY-distance < row {
-		remainingDistance := distance - Abs(row-sensorY) //row 10 distance 20 target 20
-		minX = sensorX - remainingDistance
-		maxX = sensorX + remainingDistance
+	} else if sen.y > row && sen.y-sen.distance < row {
+		remainingDistance := sen.distance - Abs(row-sen.y) //row 10 distance 20 target 20
+		myPair.min = sen.x - remainingDistance
+		myPair.max = sen.x + remainingDistance
 
 	}
-	return minX, maxX
+	return myPair
 
 }
