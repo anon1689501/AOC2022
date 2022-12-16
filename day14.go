@@ -64,7 +64,6 @@ func Day14() {
 
 	for i := 0; ; i++ {
 		sandLanded = doSand(500, 0, cave, deepest+2)
-
 		if !sandLanded || cave[xy{500, 0}] != 0 {
 			cave[xy{500, 0}] = '+'
 			fmt.Println(i + 1)
@@ -77,7 +76,6 @@ func Day14() {
 }
 func doSand(x int, y int, cave map[xy]rune, limit int) bool {
 	for i := y; i <= limit; i++ {
-		//fmt.Println("trying", x, i, cave[xy{x, i}])
 		if i == limit {
 			//fmt.Println("limit reached", x, i)
 			cave[xy{x, i}] = '#'
