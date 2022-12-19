@@ -83,33 +83,6 @@ func Day15() {
 
 	}
 
-	// fmt.Println(pairs)
-	//start := pairs[0].min
-	// end := pairs[0].max
-	// for i := 1; i < len(pairs)-1; i++ {
-	// 	if pairs[i].min <= end { //ok
-	// 		if pairs[i].max > end {
-	// 			end = pairs[i].max
-	// 		}
-
-	// 	} else {
-	// 		fmt.Println("row:", l, "column:", pairs[i].min)
-	// 		break
-	// 	}
-	// }
-
-	//d15Print(cave)
-	// nonBeaconCount := 0
-
-	// for i, v := range rowDetails {
-	// 	if i == row && v == '#' {
-	// 		nonBeaconCount++
-	// 	}
-
-	// }
-	//fmt.Println(len(rowDetails))
-	// fmt.Println(nonBeaconCount)
-	//fmt.Println(maxX - minX)
 }
 
 func sortPairs(pairs []pair) []pair {
