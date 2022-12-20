@@ -124,7 +124,7 @@ func Day18() {
 	notMissingCount := countIfLessThan(missingCubes, 3)
 	fmt.Println(notMissingCount)
 	for {
-		fmt.Println(missingCubes)
+		//fmt.Println(missingCubes)
 		for cubeOuter, valOuter := range missingCubes {
 			if valOuter < 3 {
 				for cubeInner, valInner := range missingCubes {
