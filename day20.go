@@ -18,8 +18,8 @@ func Day20() {
 	defer inputText.Close()
 
 	scanner := bufio.NewScanner(inputText)
-	numberMix := 1 //10
-	key := 1       //811589153
+	numberMix := 10
+	key := 811589153
 	numbers := make([]num, 0)
 	position := 0
 
@@ -108,9 +108,13 @@ func calcPos(len int, fromPos int, amount int) int {
 	}
 
 	offset := (amount + fromPos) % len
-	loops := (amount + fromPos) / len
+	loops := ((amount + fromPos) / len) % len
 
-	pos := (offset + loops) % len
+	pos := offset + loops
+
+	if pos > len {
+		pos = pos%len + 1
+	}
 	if pos == 0 {
 		//fmt.Println("0moving", amount, "to", len-1)
 		return len - 1
@@ -118,6 +122,7 @@ func calcPos(len int, fromPos int, amount int) int {
 	if pos < 0 {
 		pos += len - 1
 	}
+
 	//fmt.Println("3moving", amount, "to", fromPos+amount)
 	return pos
 }
