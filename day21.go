@@ -34,38 +34,64 @@ func Day21() {
 			formulas[fields[0]] = formula{fields[1], fields[2], fields[3]}
 		}
 	}
-	fmt.Println(numbers)
-	fmt.Println(formulas)
-
-	for {
+	//fmt.Println(numbers)
+	//fmt.Println(formulas)
+out:
+	for humn := 0; ; humn++ {
+		fmt.Println(humn)
+		numbersCopy := make(map[string]int)
+		formulasCopy := make(map[string]formula)
+		for i, v := range numbers {
+			numbersCopy[i] = v
+		}
 		for i, v := range formulas {
-			val1, ok1 := numbers[v.operand1]
-			val2, ok2 := numbers[v.operand2]
-			if ok1 && ok2 {
-				switch v.operator {
-				case "+":
-					numbers[i] = val1 + val2
-					delete(formulas, i)
-				case "-":
-					numbers[i] = val1 - val2
-					delete(formulas, i)
-				case "*":
-					numbers[i] = val1 * val2
-					delete(formulas, i)
-				case "/":
-					numbers[i] = val1 / val2
-					delete(formulas, i)
-				default:
-					fmt.Println("unknown operator", v.operator)
-				}
+			formulasCopy[i] = v
+		}
+		numbersCopy["humn"] = humn
+		//fmt.Println(numbersCopy)
+		//fmt.Println(formulasCopy)
+		for {
+			for i, v := range formulasCopy {
+				val1, ok1 := numbersCopy[v.operand1]
+				val2, ok2 := numbersCopy[v.operand2]
+				if ok1 && ok2 {
+					//fmt.Println(i)
 
+					if i == "root" {
+						//fmt.Println("humn found")
+						if val1 == val2 {
+							fmt.Println(val1, val2)
+							fmt.Println(humn)
+							os.Exit(3)
+						}
+						continue out
+
+					}
+					switch v.operator {
+					case "+":
+						numbersCopy[i] = val1 + val2
+						delete(formulasCopy, i)
+					case "-":
+						numbersCopy[i] = val1 - val2
+						delete(formulasCopy, i)
+					case "*":
+						numbersCopy[i] = val1 * val2
+						delete(formulasCopy, i)
+					case "/":
+						numbersCopy[i] = val1 / val2
+						delete(formulasCopy, i)
+					default:
+						fmt.Println("unknown operator", v.operator)
+					}
+
+				}
 			}
 		}
-		rootVal, rootOk := numbers["root"]
-		if rootOk {
-			fmt.Println(rootVal)
-			break
-		}
+		// rootVal, rootOk := numbers["root"]
+		// if rootOk {
+		// 	fmt.Println(rootVal)
+		// 	break
+		// }
 	}
 
 }

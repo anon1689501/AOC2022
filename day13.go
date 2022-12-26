@@ -43,6 +43,7 @@ func Day13() {
 		// }
 
 	}
+
 	linesB := make([][]string, len(lines))
 	copy(linesB, lines)
 	linesB = append(linesB, []string{"[", "[", "2", "]", "]"})
@@ -56,9 +57,9 @@ func Day13() {
 			}
 		}
 	}
-	for _, v := range linesB {
-		fmt.Println(v)
-	}
+	// for _, v := range linesB {
+	// 	fmt.Println(v)
+	// }
 	//fmt.Println(linesB)
 
 	twoLocaion := 0
@@ -85,7 +86,7 @@ func Day13() {
 		difference := 0
 		ordered := false
 
-		//fmt.Println("Pair:", i/2+1)
+		fmt.Print(i/2 + 1)
 		for j := 0; j < len(lines[i]); {
 
 			if j > len(lines[i+1]) { // stay in bounds of second string
@@ -155,17 +156,17 @@ func Day13() {
 
 		}
 		// fmt.Println(lines[i])
-		// fmt.Println()
+		fmt.Println(" ", ordered)
 
 		//display line details
 
-		// fmt.Println(lines[i])
-		// fmt.Println(lines[i+1])
+		fmt.Println(lines[i])
+		fmt.Println(lines[i+1])
 
-		// for i := 0; i < difference*2+1; i++ {
-		// 	fmt.Print(" ")
-		// }
-		// fmt.Println("^")
+		for i := 0; i < difference*2+1; i++ {
+			fmt.Print(" ")
+		}
+		fmt.Println("^")
 
 		//end display line details
 
