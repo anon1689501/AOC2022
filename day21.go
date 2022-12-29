@@ -36,62 +36,110 @@ func Day21() {
 	}
 	//fmt.Println(numbers)
 	//fmt.Println(formulas)
-out:
-	for humn := 0; ; humn++ {
-		fmt.Println(humn)
-		numbersCopy := make(map[string]int)
-		formulasCopy := make(map[string]formula)
-		for i, v := range numbers {
-			numbersCopy[i] = v
-		}
+	delete(numbers, "humn")
+	formulasCount := len(formulas)
+
+	for {
 		for i, v := range formulas {
-			formulasCopy[i] = v
-		}
-		numbersCopy["humn"] = humn
-		//fmt.Println(numbersCopy)
-		//fmt.Println(formulasCopy)
-		for {
-			for i, v := range formulasCopy {
-				val1, ok1 := numbersCopy[v.operand1]
-				val2, ok2 := numbersCopy[v.operand2]
-				if ok1 && ok2 {
-					//fmt.Println(i)
-
-					if i == "root" {
-						//fmt.Println("humn found")
-						if val1 == val2 {
-							fmt.Println(val1, val2)
-							fmt.Println(humn)
-							os.Exit(3)
-						}
-						continue out
-
-					}
-					switch v.operator {
-					case "+":
-						numbersCopy[i] = val1 + val2
-						delete(formulasCopy, i)
-					case "-":
-						numbersCopy[i] = val1 - val2
-						delete(formulasCopy, i)
-					case "*":
-						numbersCopy[i] = val1 * val2
-						delete(formulasCopy, i)
-					case "/":
-						numbersCopy[i] = val1 / val2
-						delete(formulasCopy, i)
-					default:
-						fmt.Println("unknown operator", v.operator)
-					}
-
+			val1, ok1 := numbers[v.operand1]
+			val2, ok2 := numbers[v.operand2]
+			if ok1 && ok2 {
+				//fmt.Println(i)
+				switch v.operator {
+				case "+":
+					numbers[i] = val1 + val2
+					delete(formulas, i)
+				case "-":
+					numbers[i] = val1 - val2
+					delete(formulas, i)
+				case "*":
+					numbers[i] = val1 * val2
+					delete(formulas, i)
+				case "/":
+					numbers[i] = val1 / val2
+					delete(formulas, i)
+				default:
+					fmt.Println("unknown operator", v.operator)
 				}
+
 			}
+		}
+		if len(formulas) < formulasCount {
+			formulasCount = len(formulas)
+			fmt.Println(formulasCount)
+		} else {
+			break
+		}
+	}
+	fmt.Println(numbers["czdp"])
+
+	nextVal := 0
+	nextVar := ""
+
+	rootLeft, rootLeftOk := numbers[formulas["root"].operand1]
+	rootRight, rootRightOk := numbers[formulas["root"].operand2]
+
+	if rootLeftOk {
+		nextVal = rootLeft
+		nextVar = formulas["root"].operand2
+	} else if rootRightOk {
+		nextVal = rootRight
+		nextVar = formulas["root"].operand1
+	} else {
+		fmt.Println("no good root val found")
+	}
+
+	fmt.Println(nextVal, nextVar)
+
+	for {
+		val1, ok1 := numbers[formulas[nextVar].operand1]
+		val2, ok2 := numbers[formulas[nextVar].operand2]
+		if ok1 && ok2 {
+			fmt.Println("both vals found for", nextVar)
+		}
+		if ok1 { //left val has number
+			switch formulas[nextVar].operator {
+			case "+": //nextVal = val1 + nextVar
+				nextVal = nextVal - val1
+			case "-": //nextVal = val1 - nextVar
+				nextVal = -1 * (nextVal - val1)
+			case "*": //nextVal = val1 * nextVar
+				nextVal = nextVal / val1
+			case "/": //nextVal = val1 / nextVar
+				nextVal = val1 / nextVal
+			default:
+				fmt.Println("unknown operator", formulas[nextVar].operator)
+			}
+			nextVar = formulas[nextVar].operand2
+
+		} else if ok2 { //right has a number
+			switch formulas[nextVar].operator {
+			case "+": //nextVal = nextVar + val2
+				nextVal = nextVal - val2
+			case "-": //nextVal = nextVar - val2
+				nextVal = nextVal + val2
+			case "*": //nextVal = nextVar * val2
+				nextVal = nextVal / val2
+			case "/": //nextVal = nextVar / val2
+				nextVal = val2 * nextVal
+			default:
+				fmt.Println("unknown operator", formulas[nextVar].operator)
+			}
+			nextVar = formulas[nextVar].operand1
+
+		} else {
+			fmt.Println("neither val found", nextVar)
+		}
+		if nextVar == "humn" {
+			fmt.Println(nextVal)
+			break
 		}
 		// rootVal, rootOk := numbers["root"]
 		// if rootOk {
 		// 	fmt.Println(rootVal)
 		// 	break
 		// }
+
 	}
 
 }
@@ -101,3 +149,5 @@ type formula struct {
 	operator string
 	operand2 string
 }
+
+//part2 215 too low
